@@ -11,25 +11,22 @@
         </locale-config>
     </application>
 
-    <!-- Session-scoped Managed Bean для истории -->
     <managed-bean>
         <managed-bean-name>resultHistoryBean</managed-bean-name>
         <managed-bean-class>ru.ifmo.web.beans.ResultHistoryBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
-    <!-- Request-scoped Managed Bean для проверки точки -->
     <managed-bean>
         <managed-bean-name>pointBean</managed-bean-name>
         <managed-bean-class>ru.ifmo.web.beans.PointBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>view</managed-bean-scope>
         <managed-property>
             <property-name>resultHistoryBean</property-name>
             <value>#{resultHistoryBean}</value>
         </managed-property>
     </managed-bean>
 
-    <!-- View-scoped Managed Bean для часов -->
     <managed-bean>
         <managed-bean-name>clockBean</managed-bean-name>
         <managed-bean-class>ru.ifmo.web.beans.ClockBean</managed-bean-class>

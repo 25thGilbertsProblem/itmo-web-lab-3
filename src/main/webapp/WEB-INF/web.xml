@@ -7,43 +7,37 @@
 
     <display-name>Web Lab 3 - JSF</display-name>
 
-    <!-- КРИТИЧНО: Отключаем мониторинг файлов JSF -->
+    <!-- Подключаем дополнительный JSF-конфиг -->
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/navigation-rules.xml</param-value>
+    </context-param>
+
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
     </context-param>
 
-    <!-- КРИТИЧНО: Период обновления = -1 (никогда) -->
     <context-param>
         <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
         <param-value>-1</param-value>
     </context-param>
 
-    <!-- КРИТИЧНО: Отключаем потоки для мониторинга -->
     <context-param>
         <param-name>com.sun.faces.enableThreading</param-name>
         <param-value>false</param-value>
     </context-param>
 
-    <!-- Отключаем валидацию XML -->
-    <context-param>
-        <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>false</param-value>
-    </context-param>
-
-    <!-- Настройки JSF -->
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
 
-    <!-- PrimeFaces настройки -->
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>saga</param-value>
     </context-param>
 
-    <!-- Servlet для JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

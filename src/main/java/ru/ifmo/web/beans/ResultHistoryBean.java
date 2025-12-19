@@ -2,7 +2,7 @@ package ru.ifmo.web.beans;
 
 import ru.ifmo.web.models.Result;
 import ru.ifmo.web.utils.DatabaseManager;
-import org.primefaces.PrimeFaces;
+//import org.primefaces.PrimeFaces;
 
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
@@ -75,7 +75,7 @@ public class ResultHistoryBean implements Serializable {
         if (cleared) {
             results.clear();
 
-            PrimeFaces.current().ajax().addCallbackParam("resultsJson", "[]");
+//            PrimeFaces.current().ajax().addCallbackParam("resultsJson", "[]");
 
             LOGGER.log(Level.INFO, "Results cleared for session: {0}", sessionId);
         } else {
@@ -86,8 +86,11 @@ public class ResultHistoryBean implements Serializable {
 
     public String getResultsAsJson() {
         if (results == null || results.isEmpty()) {
+            LOGGER.info("getResultsAsJson: No results, returning empty array");
             return "[]";
         }
+
+        LOGGER.log(Level.INFO, "getResultsAsJson: Generating JSON for {0} results", results.size());
 
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < results.size(); i++) {
@@ -96,7 +99,7 @@ public class ResultHistoryBean implements Serializable {
             json.append("\"x\":").append(r.getX()).append(",");
             json.append("\"y\":").append(r.getY()).append(",");
             json.append("\"r\":").append(r.getR()).append(",");
-            json.append("\"hit\":").append(r.isHit());
+            json.append("\"hit\":").append(r.isHit() ? "true" : "false");
             json.append("}");
 
             if (i < results.size() - 1) {
@@ -105,13 +108,20 @@ public class ResultHistoryBean implements Serializable {
         }
         json.append("]");
 
-        return json.toString();
+        String result = json.toString();
+        LOGGER.log(Level.INFO, "getResultsAsJson: Generated JSON with {0} characters for {1} results",
+                new Object[]{result.length(), results.size()});
+
+        return result;
     }
 
     public int getResultsCount() {
         return results.size();
     }
 
+    public void setResultsAsJson(String ignored) {
+        //
+    }
 
     public boolean hasResults() {
         return !results.isEmpty();

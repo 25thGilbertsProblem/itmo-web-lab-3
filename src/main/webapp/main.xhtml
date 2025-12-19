@@ -12,83 +12,17 @@
     <h:outputStylesheet library="css" name="styles.css"/>
 
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .form-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .canvas-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        #areaCanvas {
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            cursor: crosshair;
-            max-width: 100%;
-        }
-
-        .results-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .input-group {
-            display: flex;
-            gap: 20px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .input-field {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .input-field label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; margin: 0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
+        .main-container { max-width: 1200px; margin: 0 auto; }
+        .form-panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .canvas-panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        #areaCanvas { border: 2px solid #ddd; border-radius: 5px; cursor: crosshair; max-width: 100%; }
+        .results-panel { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .input-group { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px; }
+        .input-field { flex: 1; min-width: 150px; }
+        .input-field label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; }
     </style>
 </h:head>
 
@@ -99,7 +33,6 @@
             <p>Клевцов Александр Сергеевич | Группа P3215 | Вариант 28062</p>
         </div>
 
-        <!-- Форма ввода координат -->
         <div class="form-panel">
             <h2>Параметры точки</h2>
 
@@ -107,13 +40,11 @@
                 <p:messages id="messages" showDetail="true" closable="true"/>
 
                 <div class="input-group">
-                    <!-- X координата: p:spinner -->
                     <div class="input-field">
                         <p:outputLabel for="xInput" value="Координата X (-5 ... 5):" styleClass="input-label"/>
                         <p:spinner id="xInput"
                                    value="#{pointBean.x}"
-                                   min="-5"
-                                   max="5"
+                                   min="-5" max="5"
                                    stepFactor="0.1"
                                    decimalPlaces="1"
                                    required="true"
@@ -122,7 +53,6 @@
                         </p:spinner>
                     </div>
 
-                    <!-- Y координата: inputText -->
                     <div class="input-field">
                         <p:outputLabel for="yInput" value="Координата Y (-3 ... 3):" styleClass="input-label"/>
                         <p:inputText id="yInput"
@@ -134,13 +64,11 @@
                         </p:inputText>
                     </div>
 
-                    <!-- R радиус: p:spinner -->
                     <div class="input-field">
                         <p:outputLabel for="rInput" value="Радиус R (0.1 ... 3):" styleClass="input-label"/>
                         <p:spinner id="rInput"
                                    value="#{pointBean.r}"
-                                   min="0.1"
-                                   max="3"
+                                   min="0.1" max="3"
                                    stepFactor="0.1"
                                    decimalPlaces="1"
                                    required="true"
@@ -154,18 +82,17 @@
                 <div class="button-group">
                     <p:commandButton value="Проверить"
                                      action="#{pointBean.checkPoint}"
-                                     update="messages resultsTable"
+                                     update="messages resultsTable :canvasForm:allResultsJson"
                                      icon="pi pi-check"
                                      styleClass="ui-button-success"
-                                     oncomplete="if(args &amp;&amp; args.resultsJson) { updateResultsData(args.resultsJson); } redrawCanvas()"/>
-
+                                     oncomplete="updateResultsFromHidden(); redrawCanvas();"/>
 
                     <p:commandButton value="Очистить историю"
                                      action="#{resultHistoryBean.clearResults}"
-                                     update="messages resultsTable"
+                                     update="messages resultsTable :canvasForm:allResultsJson"
                                      icon="pi pi-trash"
                                      styleClass="ui-button-danger"
-                                     oncomplete="if(args &amp;&amp; args.resultsJson) { updateResultsData(args.resultsJson); } redrawCanvas()">
+                                     oncomplete="updateResultsFromHidden(); redrawCanvas();">
                         <p:confirm header="Подтверждение"
                                    message="Вы уверены, что хотите очистить всю историю?"
                                    icon="pi pi-exclamation-triangle"/>
@@ -179,7 +106,6 @@
             </h:form>
         </div>
 
-        <!-- Canvas с графиком -->
         <div class="canvas-panel">
             <h2>Графическое представление области</h2>
             <canvas id="areaCanvas" width="500" height="500"></canvas>
@@ -189,15 +115,18 @@
                 <h:inputHidden id="canvasY" value="#{pointBean.y}"/>
                 <h:inputHidden id="canvasR" value="#{pointBean.r}"/>
 
+                <!-- read-only для клиента; обновляем через update -->
+                <h:inputHidden id="allResultsJson" value="#{resultHistoryBean.resultsAsJson}"/>
+
                 <p:remoteCommand name="checkPointFromCanvas"
                                  action="#{pointBean.checkPointFromCanvas}"
-                                 update=":pointForm:messages :resultsTable"
-                                 oncomplete="if(args &amp;&amp; args.resultsJson) { updateResultsData(args.resultsJson); } redrawCanvas()"/>
-
+                                 process="@this canvasX canvasY canvasR"
+                                 partialSubmit="true"
+                                 update=":pointForm:messages :resultsTable :canvasForm:allResultsJson"
+                                 oncomplete="updateResultsFromHidden(); redrawCanvas();"/>
             </h:form>
         </div>
 
-        <!-- Таблица результатов -->
         <div class="results-panel">
             <h2>История результатов (#{resultHistoryBean.resultsCount})</h2>
 
@@ -209,6 +138,10 @@
                          rows="10"
                          paginatorPosition="bottom"
                          styleClass="results-table">
+
+                <p:ajax event="page"
+                        update=":canvasForm:allResultsJson"
+                        oncomplete="updateResultsFromHidden(); redrawCanvas();"/>
 
                 <p:column headerText="X" sortBy="#{result.x}">
                     <h:outputText value="#{result.x}">
@@ -242,41 +175,31 @@
                 <p:column headerText="Время выполнения">
                     <h:outputText value="#{result.executionTime} нс"/>
                 </p:column>
+
             </p:dataTable>
         </div>
 
-        <!-- Кнопка возврата -->
         <div style="text-align: center; margin-top: 20px;">
             <h:form>
                 <p:commandButton value="Вернуться на стартовую страницу"
                                  action="toIndex"
                                  icon="pi pi-arrow-left"
-                                 styleClass="ui-button-secondary"/>
+                                 styleClass="ui-button-secondary"
+                                 ajax="false"/>
             </h:form>
         </div>
     </div>
 
-    <!-- JavaScript для Canvas -->
     <h:outputScript library="js" name="canvas.js" target="body"/>
 
     <script type="text/javascript">
-        // Передаем данные из Java в JavaScript
-        var allResultsData = [];
-
-        try {
-            var jsonString = '#{resultHistoryBean.resultsAsJson}';
-            console.log('Initial JSON string:', jsonString);
-            allResultsData = JSON.parse(jsonString);
-            console.log('Parsed initial ', allResultsData);
-        } catch (e) {
-            console.error('Error parsing initial JSON:', e);
-            allResultsData = [];
-        }
-
-    // Инициализация canvas при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function() {
-        redrawCanvas();
+        //<![CDATA[
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof updateResultsFromHidden === 'function') updateResultsFromHidden();
+            if (typeof redrawCanvas === 'function') redrawCanvas();
         });
+        //]]>
     </script>
+
 </h:body>
 </html>

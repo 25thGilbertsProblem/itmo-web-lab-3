@@ -2,7 +2,7 @@ package ru.ifmo.web.beans;
 
 import ru.ifmo.web.models.Result;
 import ru.ifmo.web.utils.HitChecker;
-import org.primefaces.PrimeFaces;
+//import org.primefaces.PrimeFaces;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -53,8 +53,8 @@ public class PointBean implements Serializable {
 
         resultHistoryBean.addResult(result);
 
-        PrimeFaces.current().ajax().addCallbackParam("resultsJson",
-                resultHistoryBean.getResultsAsJson());
+//        PrimeFaces.current().ajax().addCallbackParam("resultsJson",
+//                resultHistoryBean.getResultsAsJson());
 
         String message = hit
                 ? String.format("Точка (%.2f, %.2f) попала в область!", x, y)
