@@ -9,6 +9,15 @@ const CENTER_Y = HEIGHT / 2;
 let currentR = 2;
 let allResultsData = [];
 
+let redrawTimer = null;
+function scheduleRedraw(delayMs = 30) {
+    if (redrawTimer) clearTimeout(redrawTimer);
+    redrawTimer = setTimeout(() => {
+        redrawTimer = null;
+        redrawCanvas();
+    }, delayMs);
+}
+
 function updateResultsFromHidden() {
     const hidden = document.querySelector('[id$="allResultsJson"]');
     if (!hidden) {
@@ -21,13 +30,7 @@ function updateResultsFromHidden() {
 
     try {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-            allResultsData = parsed;
-        } else {
-            console.warn('[SYNC] allResultsJson parsed but not array');
-            allResultsData = [];
-        }
-        console.log('[SYNC] Points loaded:', allResultsData.length);
+        allResultsData = Array.isArray(parsed) ? parsed : [];
     } catch (e) {
         console.error('[SYNC] JSON parse error:', e);
         console.error('[SYNC] Raw value:', raw);
@@ -35,10 +38,15 @@ function updateResultsFromHidden() {
     }
 }
 
+function parseLocaleNumber(value) {
+    if (value == null) return NaN;
+    return parseFloat(String(value).replace(',', '.'));
+}
+
 function getCurrentR() {
     const rInput = document.querySelector('[id$="rInput_input"]');
     if (rInput && rInput.value) {
-        const r = parseFloat(rInput.value);
+        const r = parseLocaleNumber(rInput.value);
         if (!isNaN(r) && r >= 0.1 && r <= 3) {
             return r;
         }
@@ -46,7 +54,7 @@ function getCurrentR() {
 
     const canvasR = document.querySelector('[id$="canvasR"]');
     if (canvasR && canvasR.value) {
-        const r = parseFloat(canvasR.value);
+        const r = parseLocaleNumber(canvasR.value);
         if (!isNaN(r)) {
             return r;
         }
@@ -57,6 +65,23 @@ function getCurrentR() {
 
 function updateCurrentR() {
     currentR = getCurrentR();
+}
+
+function attachRLiveRedraw() {
+    const rEl = document.querySelector('[id$="rInput_input"]');
+    if (!rEl) {
+        console.warn('[R] rInput_input not found (yet)');
+        return;
+    }
+
+    if (rEl.dataset.canvasListenerAttached === 'true') {
+        return;
+    }
+    rEl.dataset.canvasListenerAttached = 'true';
+
+    rEl.addEventListener('input', () => scheduleRedraw(20));
+
+    rEl.addEventListener('change', () => redrawCanvas());
 }
 
 function drawCanvas() {
@@ -81,14 +106,14 @@ function drawCanvas() {
     ctx.beginPath();
     ctx.moveTo(CENTER_X, CENTER_Y);
     ctx.lineTo(CENTER_X + R * scale, CENTER_Y);
-    ctx.lineTo(CENTER_X, CENTER_Y - R / 2 * scale);
+    ctx.lineTo(CENTER_X, CENTER_Y - (R / 2) * scale);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
     // Сектор
     ctx.beginPath();
-    ctx.arc(CENTER_X, CENTER_Y, R / 2 * scale, Math.PI / 2, Math.PI, false);
+    ctx.arc(CENTER_X, CENTER_Y, (R / 2) * scale, Math.PI / 2, Math.PI, false);
     ctx.lineTo(CENTER_X, CENTER_Y);
     ctx.closePath();
     ctx.fill();
@@ -185,6 +210,7 @@ function drawPoints() {
 
         if (isNaN(x) || isNaN(y) || isNaN(r)) return;
 
+        // Масштабирование относительно текущего R
         const scaleFactor = r / currentR;
         const canvasX = CENTER_X + (x * scaleFactor) * scale;
         const canvasY = CENTER_Y - (y * scaleFactor) * scale;
@@ -208,9 +234,7 @@ function redrawCanvas() {
     drawCanvas();
 }
 
-/* Можно оставить для совместимости, но теперь не обязательно */
 function updateResultsData(newData) {
-    console.log('[UPDATE] updateResultsData called; prefer hidden-field sync');
     try {
         if (typeof newData === 'string') {
             allResultsData = JSON.parse(newData);
@@ -252,9 +276,9 @@ if (canvas) {
         const canvasRInput = document.querySelector('[id$="canvasR"]');
 
         if (canvasXInput && canvasYInput && canvasRInput) {
-            canvasXInput.value = mathX.toFixed(2).replace('.', ',');
-            canvasYInput.value = mathY.toFixed(2).replace('.', ',');
-            canvasRInput.value = currentR.toFixed(2).replace('.', ',');
+            canvasXInput.value = mathX.toFixed(2);
+            canvasYInput.value = mathY.toFixed(2);
+            canvasRInput.value = currentR.toFixed(2);
 
             if (typeof checkPointFromCanvas === 'function') {
                 checkPointFromCanvas();
@@ -267,8 +291,7 @@ if (canvas) {
     });
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', redrawCanvas);
-} else {
+document.addEventListener('DOMContentLoaded', function() {
+    attachRLiveRedraw();
     redrawCanvas();
-}
+});

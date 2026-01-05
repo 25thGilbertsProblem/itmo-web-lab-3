@@ -7,7 +7,6 @@
 
     <display-name>Web Lab 3 - JSF</display-name>
 
-    <!-- Подключаем дополнительный JSF-конфиг -->
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>/WEB-INF/navigation-rules.xml</param-value>

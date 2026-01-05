@@ -53,8 +53,6 @@ public class PointBean implements Serializable {
 
         resultHistoryBean.addResult(result);
 
-//        PrimeFaces.current().ajax().addCallbackParam("resultsJson",
-//                resultHistoryBean.getResultsAsJson());
 
         String message = hit
                 ? String.format("Точка (%.2f, %.2f) попала в область!", x, y)

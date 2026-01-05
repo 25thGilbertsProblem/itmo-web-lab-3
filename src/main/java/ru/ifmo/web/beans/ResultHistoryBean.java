@@ -75,8 +75,6 @@ public class ResultHistoryBean implements Serializable {
         if (cleared) {
             results.clear();
 
-//            PrimeFaces.current().ajax().addCallbackParam("resultsJson", "[]");
-
             LOGGER.log(Level.INFO, "Results cleared for session: {0}", sessionId);
         } else {
             LOGGER.warning("Failed to clear results from database");
