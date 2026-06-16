@@ -1,0 +1,12 @@
+ru/ifmo/web/monitoring/MonitoringRegistry.class
+ru/ifmo/web/monitoring/PointStatistics.class
+ru/ifmo/web/utils/DatabaseManager.class
+ru/ifmo/web/beans/PointBean.class
+ru/ifmo/web/monitoring/PointStatisticsMBean.class
+ru/ifmo/web/utils/HitChecker.class
+ru/ifmo/web/beans/ResultHistoryBean.class
+ru/ifmo/web/beans/ClockBean.class
+ru/ifmo/web/monitoring/FigureAreaMBean.class
+ru/ifmo/web/models/Result.class
+ru/ifmo/web/monitoring/FigureArea.class
+ru/ifmo/web/monitoring/MonitoringBootstrapListener.class

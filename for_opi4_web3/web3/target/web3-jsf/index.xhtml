@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Web Lab 3 - Стартовая страница</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+
+    <style>
+        .header-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .header-box p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .clock-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .clock-container h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .clock-time {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .clock-date {
+            font-size: 18px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .start-button {
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .start-button .ui-button {
+            font-size: 18px;
+            padding: 15px 40px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="header-box">
+        <h1>Клевцов Александр Сергеевич</h1>
+        <p><strong>Группа:</strong> P3215</p>
+        <p><strong>Вариант:</strong> 28062</p>
+    </div>
+
+    <div class="clock-container">
+        <h2>Текущее время</h2>
+        <h:form id="clockForm">
+            <div class="clock-time">
+                <h:outputText id="clockDisplay" value="#{clockBean.currentTime}"/>
+            </div>
+            <div class="clock-date">
+                <h:outputText id="dateDisplay" value="#{clockBean.currentDate}"/>
+            </div>
+
+            <!-- Автообновление каждые 8 секунд -->
+            <p:poll interval="8" update="clockDisplay dateDisplay" />
+        </h:form>
+    </div>
+
+    <div class="start-button">
+        <h:form>
+            <p:commandButton value="Перейти к приложению"
+                             action="toMain"
+                             icon="pi pi-arrow-right"
+                             styleClass="ui-button-success ui-button-lg"
+                             ajax="false"/>
+        </h:form>
+    </div>
+
+</h:body>
+</html>

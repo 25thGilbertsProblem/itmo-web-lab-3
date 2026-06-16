@@ -1,0 +1,58 @@
+/* Общие стили для приложения */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+/* PrimeFaces компоненты - дополнительные стили */
+.ui-button {
+    border-radius: 5px !important;
+}
+
+.ui-spinner {
+    width: 100%;
+}
+
+.ui-inputtext {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Таблица результатов */
+.results-table {
+    width: 100%;
+}
+
+.results-table .ui-datatable-header {
+    background: #667eea;
+    color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-field {
+        width: 100%;
+    }
+
+    #areaCanvas {
+        width: 100%;
+        height: auto;
+    }
+}
